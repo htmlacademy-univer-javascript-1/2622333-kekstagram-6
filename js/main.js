@@ -25,6 +25,8 @@ const MESSAGES = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!',
 ];
 
+const POSTS_COUNT = 25;
+
 const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -60,6 +62,9 @@ const createPost = () => ({
   url: `photos/${  getRandomNoRepeatInt(1, 25)  }.jpg`,
   description: '',
   likes: getRandomInteger(15, 200),
-  comments: '',
+  comments: createComment(),
 });
 
+const posts = Array.from({length: POSTS_COUNT}, createPost);
+console.log(posts);
+console.log(1);
