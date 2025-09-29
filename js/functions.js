@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 function getLength(string, length) {
   return string.length <= length;
 }
