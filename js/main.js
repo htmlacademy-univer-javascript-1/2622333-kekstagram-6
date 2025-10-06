@@ -29,22 +29,24 @@ const DESCRIPTIONS = [
   'Полный стрём!'
 ];
 
+const AVATAR_COUNT = 6;
 const POSTS_COUNT = 25;
+const COMMENT_COUNT = 30;
+const LIKE_MIN_COUNT = 15;
+const LIKE_MAX_COUNT = 200;
 const USED_POST_ID = [];
-const USED_COMMENT_ID = [];
 
-function getRandomInteger(a, b) {
+const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
   const result = Math.random() * (upper - lower + 1) + lower;
   return Math.floor(result);
-}
+};
 
-function getRandomArrayElement(elements) {
-  return elements[getRandomInteger(0, elements.length-1)];
-}
+const getRandomArrayElement = (array) =>
+  array[getRandomInteger(0, array.length - 1)];
 
-function getRandomNoRepeatInt(min, max, usedArray) {
+const getRandomNoRepeatInt = (min, max, usedArray) => {
   let currentValue;
   currentValue = getRandomInteger(min, max);
   while (usedArray.includes(currentValue)) {
@@ -52,28 +54,49 @@ function getRandomNoRepeatInt(min, max, usedArray) {
   }
   usedArray.push(currentValue);
   return currentValue;
-}
+};
+
+const createIdGenerator = () => {
+  let lastGeneratedId = 0;
+
+  return () => {
+    lastGeneratedId += 1;
+    return lastGeneratedId;
+  };
+};
+
+const getCommentId = createIdGenerator();
+
+const createMessage = () => Array.from(
+  {length: getRandomInteger(1, 2)},
+  () => getRandomArrayElement(MESSAGES),
+).join(' ');
 
 const createComment = () => ({
-  id: getRandomNoRepeatInt(1, 1000, USED_COMMENT_ID),
-  avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`,
-  message: getRandomArrayElement(MESSAGES),
+  id: getCommentId(),
+  avatar: `img/avatar-${getRandomInteger(1, AVATAR_COUNT)}.svg`,
+  message: createMessage(),
   name: getRandomArrayElement(NAMES),
 });
 
 const createPost = () => {
-  const commentsCount = getRandomInteger(0, 30);
-  const postId = getRandomNoRepeatInt(1, 25, USED_POST_ID);
+  const postId = getRandomNoRepeatInt(1, POSTS_COUNT, USED_POST_ID);
 
   return {
     id: postId,
     url: `photos/${postId}.jpg`,
     description: getRandomArrayElement(DESCRIPTIONS),
-    likes: getRandomInteger(15, 200),
-    comments: Array.from({length: commentsCount}, createComment),
+    likes: getRandomInteger(LIKE_MIN_COUNT, LIKE_MAX_COUNT),
+    comments: Array.from(
+      { length: getRandomInteger(0, COMMENT_COUNT) },
+      createComment,
+    ),
   };
 };
 
 // eslint-disable-next-line no-unused-vars
-const posts = Array.from({length: POSTS_COUNT}, createPost);
+const posts = Array.from(
+  {length: POSTS_COUNT},
+  createPost,
+);
 
