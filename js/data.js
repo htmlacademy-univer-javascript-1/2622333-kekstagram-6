@@ -1,4 +1,4 @@
-import {getRandomInteger, getRandomArrayElement, getRandomNoRepeatInt} from './utils.js';
+import {getRandomInteger, getRandomArrayElement, getRandomNoRepeatInt} from 'js/utils.js';
 
 const AVATAR_COUNT = 6;
 const POSTS_COUNT = 25;
@@ -81,4 +81,4 @@ const createPosts = () => Array.from(
   createPost,
 );
 
-export {createPosts}
+export { createPosts };
