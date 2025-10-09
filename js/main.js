@@ -1,2 +1,2 @@
 // eslint-disable-next-line no-unused-vars
-import { createPosts } from 'js/data.js';
+import { createPosts } from './data.js';

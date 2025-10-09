@@ -1,4 +1,4 @@
-import {getRandomInteger, getRandomArrayElement, getRandomNoRepeatInt} from 'js/utils.js';
+import {getRandomInteger, getRandomArrayElement, getRandomNoRepeatInt} from './utils.js';
 
 const AVATAR_COUNT = 6;
 const POSTS_COUNT = 25;
