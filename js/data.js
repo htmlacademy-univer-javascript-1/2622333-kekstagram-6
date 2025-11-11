@@ -81,4 +81,4 @@ const createPictures = () => Array.from(
   createPicture,
 );
 
-export { createPictures as createPictures };
+export { createPictures };
