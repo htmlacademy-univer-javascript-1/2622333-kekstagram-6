@@ -1,4 +1,4 @@
-import { pictures } from './picture-list';
+import { pictures } from './picture-list.js';
 
 let isLiked = false;
 let currentPictureIndex = -1;
