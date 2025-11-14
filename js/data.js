@@ -5,7 +5,7 @@ const POSTS_COUNT = 25;
 const COMMENT_COUNT = 30;
 const LIKE_MIN_COUNT = 15;
 const LIKE_MAX_COUNT = 200;
-const USED_POST_ID = [];
+const USED_POST_IDS = [];
 
 const NAMES = [
   'Виктория',
@@ -62,7 +62,7 @@ const createComment = () => ({
 });
 
 const createPicture = () => {
-  const postId = getRandomNoRepeatInt(1, POSTS_COUNT, USED_POST_ID);
+  const postId = getRandomNoRepeatInt(1, POSTS_COUNT, USED_POST_IDS);
 
   return {
     id: postId,
