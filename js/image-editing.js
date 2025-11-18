@@ -1,5 +1,4 @@
 import { isEscapeKey } from './utils.js';
-import { resetValidation } from './form-validation.js';
 
 const uploadImage = document.querySelector('.img-upload__input');
 const imageEditor = document.querySelector('.img-upload__overlay');
@@ -23,12 +22,11 @@ function openImageEditor () {
 uploadImage.addEventListener('change', openImageEditor);
 
 function closeImageEditor () {
-  imageEditor.classList.add('hidden');
-  mainWindow.classList.remove('modal-open');
-  document.removeEventListener('keydown', onDocumentKeydown);
-  uploadImage.value = '';
   form.reset();
-  resetValidation();
+  uploadImage.value = '';
+  mainWindow.classList.remove('modal-open');
+  imageEditor.classList.add('hidden');
+  document.removeEventListener('keydown', onDocumentKeydown);
 }
 
 closeEditorElement.addEventListener('click', () => {

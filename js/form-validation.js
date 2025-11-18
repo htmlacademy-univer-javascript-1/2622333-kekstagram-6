@@ -7,7 +7,7 @@ const commentInput = form.querySelector('.text__description');
 const pristine = new Pristine(form , {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
-  errorTextClass: 'img-upload__error-text',
+  errorTextClass: 'img-upload__field-wrapper-error',
 });
 
 const hashtagRegex = /^#[a-zа-яё0-9]{1,19}$/i;
