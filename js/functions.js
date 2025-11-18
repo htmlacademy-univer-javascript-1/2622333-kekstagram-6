@@ -13,4 +13,3 @@ function isMeetingOnWorkTime(workStart, workEnd, meetingStart, meetingDuration) 
   return meetingStartMinutes >= workStartMinutes &&
         meetingEndMinutes <= workEndMinutes;
 }
-
