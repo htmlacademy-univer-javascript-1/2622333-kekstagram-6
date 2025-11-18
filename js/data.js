@@ -61,7 +61,7 @@ const createComment = () => ({
   name: getRandomArrayElement(NAMES),
 });
 
-const createPost = () => {
+const createPicture = () => {
   const postId = getRandomNoRepeatInt(1, POSTS_COUNT, USED_POST_ID);
 
   return {
@@ -76,9 +76,9 @@ const createPost = () => {
   };
 };
 
-const createPosts = () => Array.from(
+const createPictures = () => Array.from(
   { length: POSTS_COUNT },
-  createPost,
+  createPicture,
 );
 
-export { createPosts };
+export { createPictures as createPictures };
