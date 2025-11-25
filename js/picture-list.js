@@ -1,4 +1,4 @@
-import { createPictures } from './data.js';
+import { createPictures } from './picture-data.js';
 
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 export const pictures = createPictures();
