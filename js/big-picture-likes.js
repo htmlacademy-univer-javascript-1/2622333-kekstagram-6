@@ -3,10 +3,9 @@ import { pictures } from './picture-list.js';
 let isLiked = false;
 let currentPictureIndex = -1;
 
-const bigPicLikes = document.querySelector('.likes-count');
-const thumbnails = document.querySelectorAll('.picture');
+const bigPicLikesElement = document.querySelector('.likes-count');
 
-const toggleLike = () => {
+const onToggleLike = () => {
   if (currentPictureIndex !== -1) {
     if (isLiked) {
       pictures[currentPictureIndex].likes--;
@@ -16,8 +15,9 @@ const toggleLike = () => {
       isLiked = true;
     }
 
-    bigPicLikes.textContent = pictures[currentPictureIndex].likes;
-    const thumbnail = thumbnails[currentPictureIndex];
+    const currentThumbnails = Array.from(document.querySelectorAll('.picture'));
+    bigPicLikesElement.textContent = pictures[currentPictureIndex].likes;
+    const thumbnail = currentThumbnails[currentPictureIndex];
     if (thumbnail) {
       thumbnail.querySelector('.picture__likes').textContent = pictures[currentPictureIndex].likes;
     }
@@ -25,19 +25,19 @@ const toggleLike = () => {
 };
 
 const onLikesClick = () => {
-  toggleLike();
+  onToggleLike();
 };
 
 const initLikes = (pictureIndex, likesCount) => {
   currentPictureIndex = pictureIndex;
   isLiked = false;
-  bigPicLikes.textContent = likesCount;
+  bigPicLikesElement.textContent = likesCount;
 };
 
 const resetLikes = () => {
   isLiked = false;
   currentPictureIndex = -1;
-  bigPicLikes.removeEventListener('click', onLikesClick);
+  bigPicLikesElement.removeEventListener('click', onLikesClick);
 };
 
 export { initLikes, onLikesClick, resetLikes };

@@ -1,42 +1,48 @@
 const COMMENTS_LOADING_SIZE = 5;
-let pictureComments = [];
-let commentsShown = 0;
+let pictureCommentsList = [];
+let isCommentsShown = 0;
 
 const bigPicCommentList = document.querySelector('.social__comments');
-const bigPicCommentCount = document.querySelector('.social__comment-count');
-const bigPicCommentLoader = document.querySelector('.comments-loader');
+const bigPicCommentCountElement = document.querySelector('.social__comment-count');
+const bigPicCommentLoaderElement = document.querySelector('.comments-loader');
+
 
 const createCommentElement = (comment) => {
   const commentElement = document.createElement('li');
   commentElement.classList.add('social__comment');
 
-  commentElement.innerHTML = `
-    <img
-      class="social__picture"
-      src="${comment.avatar}"
-      alt="${comment.name}"
-      width="35" height="35">
-    <p class="social__text">${comment.message}</p>
-  `;
+  const avatarImg = document.createElement('img');
+  avatarImg.classList.add('social__picture');
+  avatarImg.src = comment.avatar;
+  avatarImg.alt = comment.name;
+  avatarImg.width = 35;
+  avatarImg.height = 35;
+
+  const textElement = document.createElement('p');
+  textElement.classList.add('social__text');
+  textElement.textContent = comment.message;
+
+  commentElement.appendChild(avatarImg);
+  commentElement.appendChild(textElement);
 
   return commentElement;
 };
 
 const renderCommentsPortion = () => {
-  const commentsToShow = pictureComments.slice(commentsShown, commentsShown + COMMENTS_LOADING_SIZE);
+  const commentsToShow = pictureCommentsList.slice(isCommentsShown, isCommentsShown + COMMENTS_LOADING_SIZE);
 
   commentsToShow.forEach((comment) => {
     const commentElement = createCommentElement(comment);
     bigPicCommentList.appendChild(commentElement);
   });
 
-  commentsShown += commentsToShow.length;
-  bigPicCommentCount.innerHTML = `${commentsShown} из <span class="comments-count">${pictureComments.length}</span> комментариев`;
+  isCommentsShown += commentsToShow.length;
+  bigPicCommentCountElement.innerHTML = `${isCommentsShown} из <span class="comments-count">${pictureCommentsList.length}</span> комментариев`;
 
-  if (commentsShown >= pictureComments.length) {
-    bigPicCommentLoader.classList.add('hidden');
+  if (isCommentsShown >= pictureCommentsList.length) {
+    bigPicCommentLoaderElement.classList.add('hidden');
   } else {
-    bigPicCommentLoader.classList.remove('hidden');
+    bigPicCommentLoaderElement.classList.remove('hidden');
   }
 };
 
@@ -45,16 +51,16 @@ const onCommentsLoaderClick = () => {
 };
 
 const initComments = (comments) => {
-  pictureComments = comments;
-  commentsShown = 0;
+  pictureCommentsList = comments;
+  isCommentsShown = 0;
   bigPicCommentList.innerHTML = '';
   renderCommentsPortion();
 };
 
 const resetComments = () => {
-  pictureComments = [];
-  commentsShown = 0;
-  bigPicCommentLoader.removeEventListener('click', onCommentsLoaderClick);
+  pictureCommentsList = [];
+  isCommentsShown = 0;
+  bigPicCommentLoaderElement.removeEventListener('click', onCommentsLoaderClick);
 };
 
 export { initComments, onCommentsLoaderClick, resetComments };
