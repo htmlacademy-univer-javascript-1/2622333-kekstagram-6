@@ -7,7 +7,7 @@ const bigPicImgElement = bigPictureElement.querySelector('.big-picture__img img'
 const bigPicDescriptionElement = bigPictureElement.querySelector('.social__caption');
 const bigPicLikesElement = bigPictureElement.querySelector('.likes-count');
 const bigPicCommentsElement = bigPictureElement.querySelector('.comments-count');
-const bigPicCommentListElement = bigPictureElement.querySelector('.social__comments');
+const bigPicCommentList = bigPictureElement.querySelector('.social__comments');
 const openBigPicElement = document.querySelector('.pictures');
 const bigPicCommentCountElement = document.querySelector('.social__comment-count');
 const bigPicCommentLoaderElement = document.querySelector('.comments-loader');
@@ -42,9 +42,9 @@ const createCommentElement = (comment) => {
 };
 
 const renderAllComments = (comments) => {
-  bigPicCommentListElement.innerHTML = '';
+  bigPicCommentList.innerHTML = '';
   comments.forEach((comment) => {
-    bigPicCommentListElement.appendChild(createCommentElement(comment));
+    bigPicCommentList.appendChild(createCommentElement(comment));
   });
 };
 
