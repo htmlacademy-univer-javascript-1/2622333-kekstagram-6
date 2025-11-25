@@ -27,7 +27,7 @@ const onThumbnailClick = (evt) => {
   if (thumbnail) {
     const currentThumbnails = Array.from(document.querySelectorAll('.picture'));
     const thumbnailImg = thumbnail.querySelector('.picture__img');
-    const index = Array.from(currentThumbnails).indexOf(thumbnail);
+    const index = currentThumbnails.indexOf(thumbnail);
 
     if (index !== -1) {
       const pictureData = pictures[index];
