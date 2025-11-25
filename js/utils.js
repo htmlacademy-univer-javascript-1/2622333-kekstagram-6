@@ -19,4 +19,6 @@ const getRandomNoRepeatInt = (min, max, usedArray) => {
   return currentValue;
 };
 
-export {getRandomInteger, getRandomArrayElement, getRandomNoRepeatInt};
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export {getRandomInteger, getRandomArrayElement, getRandomNoRepeatInt, isEscapeKey};
