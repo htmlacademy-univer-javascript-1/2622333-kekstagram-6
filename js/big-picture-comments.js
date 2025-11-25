@@ -3,8 +3,8 @@ let pictureCommentsList = [];
 let isCommentsShown = 0;
 
 const bigPicCommentList = document.querySelector('.social__comments');
-const bigPicCommentCountElement = document.querySelector('.social__comment-count');
-const bigPicCommentLoaderElement = document.querySelector('.comments-loader');
+const bigPicCommentCount = document.querySelector('.social__comment-count');
+const bigPicCommentLoader = document.querySelector('.comments-loader');
 
 
 const createCommentElement = (comment) => {
@@ -37,12 +37,12 @@ const renderCommentsPortion = () => {
   });
 
   isCommentsShown += commentsToShow.length;
-  bigPicCommentCountElement.innerHTML = `${isCommentsShown} из <span class="comments-count">${pictureCommentsList.length}</span> комментариев`;
+  bigPicCommentCount.innerHTML = `${isCommentsShown} из <span class="comments-count">${pictureCommentsList.length}</span> комментариев`;
 
   if (isCommentsShown >= pictureCommentsList.length) {
-    bigPicCommentLoaderElement.classList.add('hidden');
+    bigPicCommentLoader.classList.add('hidden');
   } else {
-    bigPicCommentLoaderElement.classList.remove('hidden');
+    bigPicCommentLoader.classList.remove('hidden');
   }
 };
 
@@ -60,7 +60,7 @@ const initComments = (comments) => {
 const resetComments = () => {
   pictureCommentsList = [];
   isCommentsShown = 0;
-  bigPicCommentLoaderElement.removeEventListener('click', onCommentsLoaderClick);
+  bigPicCommentLoader.removeEventListener('click', onCommentsLoaderClick);
 };
 
 export { initComments, onCommentsLoaderClick, resetComments };

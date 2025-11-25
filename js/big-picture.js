@@ -3,22 +3,32 @@ import { pictures } from './picture-list.js';
 import { initComments, onCommentsLoaderClick, resetComments } from './big-picture-comments.js';
 import { initLikes, onLikesClick, resetLikes } from './big-picture-likes.js';
 
-const openBigPicElement = document.querySelector('.pictures');
-const closeBigPicElement = document.querySelector('.big-picture__cancel');
+const openBigPic = document.querySelector('.pictures');
+const closeBigPic = document.querySelector('.big-picture__cancel');
 const mainWindow = document.body;
 
-const bigPictureElement = document.querySelector('.big-picture');
-const bigPicImgElement = bigPictureElement.querySelector('.big-picture__img img');
-const bigPicDescriptionElement = bigPictureElement.querySelector('.social__caption');
-const bigPicCommentsElement = bigPictureElement.querySelector('.comments-count');
-const bigPicCommentLoaderElement = document.querySelector('.comments-loader');
-const bigPicLikesElement = document.querySelector('.likes-count');
+const bigPicture = document.querySelector('.big-picture');
+const bigPicImg = bigPicture.querySelector('.big-picture__img img');
+const bigPicDescription = bigPicture.querySelector('.social__caption');
+const bigPicComments = bigPicture.querySelector('.comments-count');
+const bigPicCommentLoader = document.querySelector('.comments-loader');
+const bigPicLikes = document.querySelector('.likes-count');
 
-const onDocumentKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    onCloseBigPic();
-  }
+const onCloseBigPic = () => {
+  bigPicture.classList.add('hidden');
+  mainWindow.classList.remove('modal-open');
+  document.removeEventListener('keydown', onDocumentKeydown);
+
+  resetComments();
+  resetLikes();
+};
+
+const onOpenBigPic = () => {
+  bigPicture.classList.remove('hidden');
+  mainWindow.classList.add('modal-open');
+  document.addEventListener('keydown', onDocumentKeydown);
+  bigPicCommentLoader.addEventListener('click', onCommentsLoaderClick);
+  bigPicLikes.addEventListener('click', onLikesClick);
 };
 
 const onThumbnailClick = (evt) => {
@@ -32,9 +42,9 @@ const onThumbnailClick = (evt) => {
     if (index !== -1) {
       const pictureData = pictures[index];
 
-      bigPicImgElement.src = thumbnailImg.src;
-      bigPicDescriptionElement.textContent = thumbnailImg.alt;
-      bigPicCommentsElement.textContent = pictureData.comments.length;
+      bigPicImg.src = thumbnailImg.src;
+      bigPicDescription.textContent = thumbnailImg.alt;
+      bigPicComments.textContent = pictureData.comments.length;
 
       initLikes(index, pictureData.likes);
       initComments(pictureData.comments);
@@ -44,27 +54,17 @@ const onThumbnailClick = (evt) => {
   }
 };
 
-function onCloseBigPic () {
-  bigPictureElement.classList.add('hidden');
-  mainWindow.classList.remove('modal-open');
-  document.removeEventListener('keydown', onDocumentKeydown);
-
-  resetComments();
-  resetLikes();
-}
-
-function onOpenBigPic () {
-  bigPictureElement.classList.remove('hidden');
-  mainWindow.classList.add('modal-open');
-  document.addEventListener('keydown', onDocumentKeydown);
-  bigPicCommentLoaderElement.addEventListener('click', onCommentsLoaderClick);
-  bigPicLikesElement.addEventListener('click', onLikesClick);
-}
-
-closeBigPicElement.addEventListener('click', () => {
+closeBigPic.addEventListener('click', () => {
   onCloseBigPic();
 });
 
-openBigPicElement.addEventListener('click', (evt) => {
+openBigPic.addEventListener('click', (evt) => {
   onThumbnailClick(evt);
 });
+
+function onDocumentKeydown (evt) {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    onCloseBigPic();
+  }
+}
