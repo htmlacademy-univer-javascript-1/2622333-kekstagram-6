@@ -7,19 +7,17 @@ const openBigPicElement = document.querySelector('.pictures');
 const closeBigPicElement = document.querySelector('.big-picture__cancel');
 const mainWindow = document.body;
 
-const bigPicture = document.querySelector('.big-picture');
-const bigPicImg = bigPicture.querySelector('.big-picture__img img');
-const bigPicDescription = bigPicture.querySelector('.social__caption');
-const bigPicComments = bigPicture.querySelector('.comments-count');
-const bigPicCommentLoader = document.querySelector('.comments-loader');
-const bigPicLikes = document.querySelector('.likes-count');
-
-const thumbnails = document.querySelectorAll('.picture');
+const bigPictureElement = document.querySelector('.big-picture');
+const bigPicImgElement = bigPictureElement.querySelector('.big-picture__img img');
+const bigPicDescriptionElement = bigPictureElement.querySelector('.social__caption');
+const bigPicCommentsElement = bigPictureElement.querySelector('.comments-count');
+const bigPicCommentLoaderElement = document.querySelector('.comments-loader');
+const bigPicLikesElement = document.querySelector('.likes-count');
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    closeBigPic();
+    onCloseBigPic();
   }
 };
 
@@ -27,26 +25,27 @@ const onThumbnailClick = (evt) => {
   const thumbnail = evt.target.closest('.picture');
 
   if (thumbnail) {
+    const currentThumbnails = Array.from(document.querySelectorAll('.picture'));
     const thumbnailImg = thumbnail.querySelector('.picture__img');
-    const index = Array.from(thumbnails).indexOf(thumbnail);
+    const index = Array.from(currentThumbnails).indexOf(thumbnail);
 
     if (index !== -1) {
       const pictureData = pictures[index];
 
-      bigPicImg.src = thumbnailImg.src;
-      bigPicDescription.textContent = thumbnailImg.alt;
-      bigPicComments.textContent = pictureData.comments.length;
+      bigPicImgElement.src = thumbnailImg.src;
+      bigPicDescriptionElement.textContent = thumbnailImg.alt;
+      bigPicCommentsElement.textContent = pictureData.comments.length;
 
       initLikes(index, pictureData.likes);
       initComments(pictureData.comments);
 
-      openBigPic();
+      onOpenBigPic();
     }
   }
 };
 
-function closeBigPic () {
-  bigPicture.classList.add('hidden');
+function onCloseBigPic () {
+  bigPictureElement.classList.add('hidden');
   mainWindow.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
 
@@ -54,16 +53,16 @@ function closeBigPic () {
   resetLikes();
 }
 
-function openBigPic () {
-  bigPicture.classList.remove('hidden');
+function onOpenBigPic () {
+  bigPictureElement.classList.remove('hidden');
   mainWindow.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
-  bigPicCommentLoader.addEventListener('click', onCommentsLoaderClick);
-  bigPicLikes.addEventListener('click', onLikesClick);
+  bigPicCommentLoaderElement.addEventListener('click', onCommentsLoaderClick);
+  bigPicLikesElement.addEventListener('click', onLikesClick);
 }
 
 closeBigPicElement.addEventListener('click', () => {
-  closeBigPic();
+  onCloseBigPic();
 });
 
 openBigPicElement.addEventListener('click', (evt) => {
