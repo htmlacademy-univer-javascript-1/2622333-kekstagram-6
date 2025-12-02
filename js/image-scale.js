@@ -1,4 +1,4 @@
-const SCALE = {
+const Scale = {
   MIN: 25,
   MAX: 100,
   STEP: 25,
@@ -10,7 +10,7 @@ const scaleBiggerButton = document.querySelector('.scale__control--bigger');
 const scaleValue = document.querySelector('.scale__control--value');
 const editingImage = document.querySelector('.img-upload__preview img');
 
-let currentScale = SCALE.DEFAULT;
+let currentScale = Scale.DEFAULT;
 
 const getScaleTransform = (scale) => `scale(${scale / 100})`;
 
@@ -19,8 +19,8 @@ const updateScale = () => {
   editingImage.style.transform = getScaleTransform(currentScale);
 };
 
-const getDecreasedScale = (scale) => Math.max(SCALE.MIN, scale - SCALE.STEP);
-const getIncreasedScale = (scale) => Math.min(SCALE.MAX, scale + SCALE.STEP);
+const getDecreasedScale = (scale) => Math.max(Scale.MIN, scale - Scale.STEP);
+const getIncreasedScale = (scale) => Math.min(Scale.MAX, scale + Scale.STEP);
 
 const onScaleSmallerButtonClick = () => {
   currentScale = getDecreasedScale(currentScale);
@@ -33,7 +33,7 @@ const onScaleBiggerButtonClick = () => {
 };
 
 const cleanupScale = () => {
-  currentScale = SCALE.DEFAULT;
+  currentScale = Scale.DEFAULT;
   updateScale();
 };
 

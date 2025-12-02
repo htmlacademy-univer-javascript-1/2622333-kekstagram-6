@@ -11,7 +11,9 @@ const form = document.querySelector('.img-upload__form');
 const hashtagField = form.querySelector('.text__hashtags');
 const commentField = form.querySelector('.text__description');
 
-const isTextFieldFocused = () => document.activeElement === hashtagField || document.activeElement === commentField;
+const isTextFieldFocused = () =>
+  document.activeElement === hashtagField ||
+document.activeElement === commentField;
 
 const closeImageEditor = () => {
   form.reset();
