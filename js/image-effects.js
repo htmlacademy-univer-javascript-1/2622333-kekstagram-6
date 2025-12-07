@@ -8,7 +8,7 @@ const EFFECTS = {
 };
 
 const editingImage = document.querySelector('.img-upload__preview img');
-const effectsList = document.querySelectorAll('.effects__list');
+const effectsList = document.querySelectorAll('.effects__radio');
 const effectLevelValue = document.querySelector('.effect-level__value');
 const effectLevelSlider = document.querySelector('.effect-level__slider');
 const effectLevel = document.querySelector('.effect-level');
@@ -84,8 +84,10 @@ const onEffectChangeHandler = (evt) => {
 const initEffects = () => {
   effectLevelSlider.noUiSlider.on('update', onSliderUpdate);
 
-  if (effectsList) {
-    effectsList.addEventListener('change', onEffectChangeHandler);
+  if (effectsList.length > 0) {
+    effectsList.forEach((effectElement) => {
+      effectElement.addEventListener('change', onEffectChangeHandler);
+    });
   }
 };
 
@@ -93,8 +95,10 @@ const resetEffects = () => {
   cleanupEffect();
   effectLevelSlider.noUiSlider.off('update');
 
-  if (effectsList) {
-    effectsList.removeEventListener('change', onEffectChangeHandler);
+  if (effectsList.length > 0) {
+    effectsList.forEach((effectElement) => {
+      effectElement.removeEventListener('change', onEffectChangeHandler);
+    });
   }
 };
 
