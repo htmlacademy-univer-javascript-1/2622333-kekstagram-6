@@ -29,6 +29,20 @@ const closeImageEditor = () => {
 };
 
 const openImageEditor = () => {
+  const file = imageUploading.files[0];
+  if (!file) {
+    return;
+  }
+
+  const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  const fileName = file.name.toLowerCase();
+  const matches = FILE_TYPES.some((type) => fileName.endsWith(type));
+
+  if (matches) {
+    const previewImage = document.querySelector('.img-upload__preview img');
+    previewImage.src = URL.createObjectURL(file);
+  }
+
   imageEditor.classList.remove('hidden');
   mainWindow.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
@@ -46,3 +60,5 @@ function onDocumentKeydown (evt) {
 
 imageUploading.addEventListener('change', openImageEditor);
 closeEditor.addEventListener('click', closeImageEditor);
+
+export { closeImageEditor, openImageEditor };
