@@ -10,6 +10,8 @@ const closeEditor = document.querySelector('.img-upload__cancel');
 const form = document.querySelector('.img-upload__form');
 const hashtagField = form.querySelector('.text__hashtags');
 const commentField = form.querySelector('.text__description');
+const previewImage = document.querySelector('.img-upload__preview img');
+const defaultImageSrc = 'img/upload-default-image.jpg';
 
 const isTextFieldFocused = () =>
   document.activeElement === hashtagField ||
@@ -18,6 +20,9 @@ document.activeElement === commentField;
 const closeImageEditor = () => {
   form.reset();
   imageUploading.value = '';
+
+  previewImage.src = defaultImageSrc;
+
   mainWindow.classList.remove('modal-open');
   imageEditor.classList.add('hidden');
   document.removeEventListener('keydown', onDocumentKeydown);
@@ -39,7 +44,6 @@ const openImageEditor = () => {
   const matches = FILE_TYPES.some((type) => fileName.endsWith(type));
 
   if (matches) {
-    const previewImage = document.querySelector('.img-upload__preview img');
     previewImage.src = URL.createObjectURL(file);
   }
 

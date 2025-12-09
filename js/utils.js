@@ -21,4 +21,10 @@ const getRandomNoRepeatInt = (min, max, usedArray) => {
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-export {getRandomInteger, getRandomArrayElement, getRandomNoRepeatInt, isEscapeKey};
+const checkForRepeats = (array) => {
+  const lowerCaseArray = array.map((item) => item.toLowerCase());
+  const uniqueSet = new Set(lowerCaseArray);
+  return uniqueSet.size !== lowerCaseArray.length;
+};
+
+export {getRandomInteger, getRandomArrayElement, getRandomNoRepeatInt, isEscapeKey, checkForRepeats };

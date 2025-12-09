@@ -85,67 +85,56 @@ pristine.addValidator(
   true
 );
 
-const showSuccessMessage = () => {
-  const successElement = successTemplate.cloneNode(true);
+const createMessageModal = (template, closeButtonSelector, innerSelector) => {
+  const element = template.cloneNode(true);
 
-  const closeSuccess = () => {
-    successElement.remove();
-    document.removeEventListener('keydown', onSuccessEscapeKeydown);
-    document.removeEventListener('click', onSuccessOutsideClick);
+  const closeModal = () => {
+    element.remove();
   };
 
-  function onSuccessEscapeKeydown(evt) {
+  const onEscapeKeydown = (evt) => {
     if (isEscapeKey(evt)) {
       evt.preventDefault();
-      closeSuccess();
+      closeModal();
     }
-  }
+  };
 
-  function onSuccessOutsideClick(evt) {
-    if (!evt.target.closest('.success__inner')) {
-      closeSuccess();
+  const onOutsideClick = (evt) => {
+    if (!evt.target.closest(innerSelector)) {
+      closeModal();
     }
-  }
+  };
 
-  const successButton = successElement.querySelector('.success__button');
-  successButton.addEventListener('click', closeSuccess);
-  document.addEventListener('keydown', onSuccessEscapeKeydown);
-  document.addEventListener('click', onSuccessOutsideClick);
+  const closeButton = element.querySelector(closeButtonSelector);
+  closeButton.addEventListener('click', closeModal);
+  document.addEventListener('keydown', onEscapeKeydown);
+  document.addEventListener('click', onOutsideClick);
 
+  return { element, closeModal };
+};
+
+const showSuccessMessage = () => {
+  const { element: successElement } = createMessageModal(
+    successTemplate,
+    '.success__button',
+    '.success__inner'
+  );
   body.appendChild(successElement);
 };
 
 const showErrorMessage = (message) => {
   const errorElement = errorTemplate.cloneNode(true);
-
   const errorTitle = errorElement.querySelector('.error__title');
   errorTitle.textContent = message;
 
-  const closeError = () => {
-    errorElement.remove();
-    document.removeEventListener('keydown', onErrorEscapeKeydown);
-    document.removeEventListener('click', onErrorOutsideClick);
-  };
-
-  function onErrorEscapeKeydown(evt) {
-    if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      closeError();
-    }
-  }
-
-  function onErrorOutsideClick(evt) {
-    if (!evt.target.closest('.error__inner')) {
-      closeError();
-    }
-  }
-
-  const errorButton = errorElement.querySelector('.error__button');
-  errorButton.addEventListener('click', closeError);
-  document.addEventListener('keydown', onErrorEscapeKeydown);
-  document.addEventListener('click', onErrorOutsideClick);
+  const { closeModal } = createMessageModal(
+    errorElement,
+    '.error__button',
+    '.error__inner'
+  );
 
   body.appendChild(errorElement);
+  return closeModal;
 };
 
 const blockSubmitButton = () => {

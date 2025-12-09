@@ -56,6 +56,8 @@ const applyEffect = (effect, value) => {
 const cleanupEffect = () => {
   editingImage.style.filter = 'none';
   effectLevelValue.value = '';
+  effectLevel.classList.add('hidden');
+  currentEffect = 'none';
 };
 
 const onSliderUpdate = () => {
