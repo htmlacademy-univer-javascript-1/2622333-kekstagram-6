@@ -50,6 +50,7 @@ const openImageEditor = () => {
   imageEditor.classList.remove('hidden');
   mainWindow.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
+
   initFormValidation();
   initEffects();
   initScale();
