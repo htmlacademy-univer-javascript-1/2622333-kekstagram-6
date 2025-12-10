@@ -85,56 +85,49 @@ pristine.addValidator(
   true
 );
 
-const createMessageModal = (template, closeButtonSelector, innerSelector) => {
+const showMessage = (template, closeButtonSelector, innerSelector, message = null) => {
   const element = template.cloneNode(true);
+
+  if (message) {
+    const titleElement = element.querySelector('h2');
+    if (titleElement) {
+      titleElement.textContent = message;
+    }
+  }
 
   const closeModal = () => {
     element.remove();
+    document.removeEventListener('keydown', onEscapeKeydown);
+    document.removeEventListener('click', onOutsideClick);
   };
 
-  const onEscapeKeydown = (evt) => {
+  function onEscapeKeydown (evt) {
     if (isEscapeKey(evt)) {
       evt.preventDefault();
       closeModal();
     }
-  };
+  }
 
-  const onOutsideClick = (evt) => {
+  function onOutsideClick (evt) {
     if (!evt.target.closest(innerSelector)) {
       closeModal();
     }
-  };
+  }
 
   const closeButton = element.querySelector(closeButtonSelector);
   closeButton.addEventListener('click', closeModal);
   document.addEventListener('keydown', onEscapeKeydown);
   document.addEventListener('click', onOutsideClick);
 
-  return { element, closeModal };
+  body.appendChild(element);
 };
 
 const showSuccessMessage = () => {
-  const { element: successElement } = createMessageModal(
-    successTemplate,
-    '.success__button',
-    '.success__inner'
-  );
-  body.appendChild(successElement);
+  showMessage(successTemplate, '.success__button', '.success__inner');
 };
 
 const showErrorMessage = (message) => {
-  const errorElement = errorTemplate.cloneNode(true);
-  const errorTitle = errorElement.querySelector('.error__title');
-  errorTitle.textContent = message;
-
-  const { closeModal } = createMessageModal(
-    errorElement,
-    '.error__button',
-    '.error__inner'
-  );
-
-  body.appendChild(errorElement);
-  return closeModal;
+  showMessage(errorTemplate, '.error__button', '.error__inner', message);
 };
 
 const blockSubmitButton = () => {
@@ -150,9 +143,7 @@ const unblockSubmitButton = () => {
 const onFormSubmit = (evt) => {
   evt.preventDefault();
 
-  const isValid = pristine.validate();
-
-  if (isValid) {
+  if (pristine.validate()) {
     blockSubmitButton();
 
     const formData = new FormData(form);
@@ -187,6 +178,8 @@ const initFormValidation = () => {
 
 const resetFormValidation = () => {
   pristine.reset();
+  hashtagInput.value = '';
+  commentInput.value = '';
 };
 
 export { initFormValidation, resetFormValidation, showErrorMessage };

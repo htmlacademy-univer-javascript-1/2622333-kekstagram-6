@@ -15,7 +15,7 @@ const defaultImageSrc = 'img/upload-default-image.jpg';
 
 const isTextFieldFocused = () =>
   document.activeElement === hashtagField ||
-document.activeElement === commentField;
+  document.activeElement === commentField;
 
 const closeImageEditor = () => {
   form.reset();
