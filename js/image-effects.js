@@ -56,6 +56,8 @@ const applyEffect = (effect, value) => {
 const cleanupEffect = () => {
   editingImage.style.filter = 'none';
   effectLevelValue.value = '';
+  effectLevel.classList.add('hidden');
+  currentEffect = 'none';
 };
 
 const onSliderUpdate = () => {
@@ -73,12 +75,12 @@ const onEffectChangeHandler = (evt) => {
   if (currentEffect === 'none') {
     effectLevel.classList.add('hidden');
     cleanupEffect();
-  } else {
-    effectLevel.classList.remove('hidden');
-    const effectData = EFFECTS[currentEffect];
-    applyEffect(currentEffect, effectData.max);
-    updateSliderOptions(currentEffect);
   }
+
+  effectLevel.classList.remove('hidden');
+  const effectData = EFFECTS[currentEffect];
+  applyEffect(currentEffect, effectData.max);
+  updateSliderOptions(currentEffect);
 };
 
 const initEffects = () => {

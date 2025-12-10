@@ -1,4 +1,4 @@
-import { pictures } from './picture-list.js';
+import { getPictures } from './picture-list.js';
 
 let isLiked = false;
 let currentPictureIndex = -1;
@@ -7,11 +7,18 @@ const bigPicLikes = document.querySelector('.likes-count');
 
 const onToggleLike = () => {
   if (currentPictureIndex !== -1) {
+    const pictures = getPictures();
+    const picture = pictures[currentPictureIndex];
+
+    if (!picture) {
+      return;
+    }
+
     if (isLiked) {
-      pictures[currentPictureIndex].likes--;
+      picture.likes--;
       isLiked = false;
     } else {
-      pictures[currentPictureIndex].likes++;
+      picture.likes++;
       isLiked = true;
     }
 
@@ -32,6 +39,7 @@ const initLikes = (pictureIndex, likesCount) => {
   currentPictureIndex = pictureIndex;
   isLiked = false;
   bigPicLikes.textContent = likesCount;
+  bigPicLikes.addEventListener('click', onLikesClick);
 };
 
 const resetLikes = () => {

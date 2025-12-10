@@ -1,3 +1,7 @@
+import { isEscapeKey } from './utils.js';
+import { sendData } from './api.js';
+import { closeImageEditor } from './image-editing.js';
+
 const MAX_HASHTAG_COUNT = 5;
 const MAX_COMMENT_LENGTH = 140;
 const VALID_SYMBOLS = /^#[a-zа-яё0-9]{1,19}$/i;
@@ -16,9 +20,14 @@ const ValidatorPriority = {
   COMMENT: 1
 };
 
+const body = document.querySelector('body');
 const form = document.querySelector('.img-upload__form');
 const hashtagInput = form.querySelector('.text__hashtags');
 const commentInput = form.querySelector('.text__description');
+const submitButton = form.querySelector('.img-upload__submit');
+
+const successTemplate = document.querySelector('#success').content.querySelector('.success');
+const errorTemplate = document.querySelector('#error').content.querySelector('.error');
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
@@ -76,11 +85,80 @@ pristine.addValidator(
   true
 );
 
-const onFormSubmit = (evt) => {
-  const isValid = pristine.validate();
+const showMessage = (template, closeButtonSelector, innerSelector, message = null) => {
+  const element = template.cloneNode(true);
 
-  if (!isValid) {
-    evt.preventDefault();
+  if (message) {
+    const titleElement = element.querySelector('h2');
+    if (titleElement) {
+      titleElement.textContent = message;
+    }
+  }
+
+  const closeModal = () => {
+    element.remove();
+    document.removeEventListener('keydown', onEscapeKeydown);
+    document.removeEventListener('click', onOutsideClick);
+  };
+
+  function onEscapeKeydown (evt) {
+    if (isEscapeKey(evt)) {
+      evt.preventDefault();
+      closeModal();
+    }
+  }
+
+  function onOutsideClick (evt) {
+    if (!evt.target.closest(innerSelector)) {
+      closeModal();
+    }
+  }
+
+  const closeButton = element.querySelector(closeButtonSelector);
+  closeButton.addEventListener('click', closeModal);
+  document.addEventListener('keydown', onEscapeKeydown);
+  document.addEventListener('click', onOutsideClick);
+
+  body.appendChild(element);
+};
+
+const showSuccessMessage = () => {
+  showMessage(successTemplate, '.success__button', '.success__inner');
+};
+
+const showErrorMessage = (message) => {
+  showMessage(errorTemplate, '.error__button', '.error__inner', message);
+};
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Публикую...';
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+
+const onFormSubmit = (evt) => {
+  evt.preventDefault();
+
+  if (pristine.validate()) {
+    blockSubmitButton();
+
+    const formData = new FormData(form);
+
+    sendData(formData)
+      .then(() => {
+        closeImageEditor();
+        showSuccessMessage();
+      })
+      .catch((error) => {
+        showErrorMessage(error.message);
+      })
+      .finally(() => {
+        unblockSubmitButton();
+      });
   }
 };
 
@@ -100,6 +178,8 @@ const initFormValidation = () => {
 
 const resetFormValidation = () => {
   pristine.reset();
+  hashtagInput.value = '';
+  commentInput.value = '';
 };
 
-export { resetFormValidation, initFormValidation };
+export { initFormValidation, resetFormValidation, showErrorMessage };

@@ -1,5 +1,5 @@
 import { isEscapeKey } from './utils.js';
-import { pictures } from './picture-list.js';
+import { getPictures } from './picture-list.js';
 import { initComments, onCommentsLoaderClick, resetComments } from './big-picture-comments.js';
 import { initLikes, onLikesClick, resetLikes } from './big-picture-likes.js';
 
@@ -35,15 +35,14 @@ const onThumbnailClick = (evt) => {
   const thumbnail = evt.target.closest('.picture');
 
   if (thumbnail) {
-    const currentThumbnails = Array.from(document.querySelectorAll('.picture'));
-    const thumbnailImg = thumbnail.querySelector('.picture__img');
-    const index = currentThumbnails.indexOf(thumbnail);
+    const pictures = getPictures();
+    const index = parseInt(thumbnail.dataset.index, 10);
 
     if (index !== -1) {
       const pictureData = pictures[index];
 
-      bigPicImg.src = thumbnailImg.src;
-      bigPicDescription.textContent = thumbnailImg.alt;
+      bigPicImg.src = pictureData.url;
+      bigPicDescription.textContent = pictureData.description;
       bigPicComments.textContent = pictureData.comments.length;
 
       initLikes(index, pictureData.likes);
