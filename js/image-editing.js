@@ -33,6 +33,50 @@ const closeImageEditor = () => {
   resetScale();
 };
 
+const showFileTypeError = () => {
+  const errorTemplate = document.querySelector('#error').content.querySelector('.error');
+  const body = document.querySelector('body');
+
+  const errorElement = errorTemplate.cloneNode(true);
+
+  const titleElement = errorElement.querySelector('h2');
+  if (titleElement) {
+    titleElement.textContent = 'Ошибка загрузки файла';
+  }
+
+  const textElement = errorElement.querySelector('p');
+  if (textElement) {
+    textElement.textContent = 'Пожалуйста, выберите файл с изображением. Поддерживаемые форматы: GIF, JPG, JPEG, PNG.';
+  }
+
+  const closeModal = () => {
+    errorElement.remove();
+    document.removeEventListener('keydown', onEscapeKeydown);
+    document.removeEventListener('click', onOutsideClick);
+  };
+
+  function onEscapeKeydown (evt) {
+    if (isEscapeKey(evt)) {
+      evt.preventDefault();
+      closeModal();
+    }
+  }
+
+  function onOutsideClick (evt) {
+    if (!evt.target.closest('.error__inner')) {
+      closeModal();
+    }
+  }
+
+  const closeButton = errorElement.querySelector('.error__button');
+  closeButton.addEventListener('click', closeModal);
+  document.addEventListener('keydown', onEscapeKeydown);
+  document.addEventListener('click', onOutsideClick);
+
+  body.appendChild(errorElement);
+  imageUploading.value = '';
+};
+
 const openImageEditor = () => {
   const file = imageUploading.files[0];
   if (!file) {
@@ -45,6 +89,13 @@ const openImageEditor = () => {
 
   if (matches) {
     previewImage.src = URL.createObjectURL(file);
+  }
+
+  const isImage = file.type.startsWith('image/');
+
+  if (!isImage) {
+    showFileTypeError();
+    return;
   }
 
   imageEditor.classList.remove('hidden');
