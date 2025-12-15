@@ -8,7 +8,7 @@ export const getPictures = () => pictures;
 export const renderPictures = (data) => {
   pictures = data;
 
-  const existingPictures = pictureList.querySelectorAll('.picture:not(.img-upload)');
+  const existingPictures = pictureList.querySelectorAll('.picture:not(.img-upload__form .picture)');
   existingPictures.forEach((picture) => picture.remove());
 
   const pictureListFragment = document.createDocumentFragment();

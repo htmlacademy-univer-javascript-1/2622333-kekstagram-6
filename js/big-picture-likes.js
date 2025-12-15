@@ -22,11 +22,11 @@ const onToggleLike = () => {
       isLiked = true;
     }
 
-    const currentThumbnails = Array.from(document.querySelectorAll('.picture'));
-    bigPicLikes.textContent = pictures[currentPictureIndex].likes;
-    const thumbnail = currentThumbnails[currentPictureIndex];
+    bigPicLikes.textContent = picture.likes;
+
+    const thumbnail = document.querySelector(`.picture[data-index="${currentPictureIndex}"]`);
     if (thumbnail) {
-      thumbnail.querySelector('.picture__likes').textContent = pictures[currentPictureIndex].likes;
+      thumbnail.querySelector('.picture__likes').textContent = picture.likes;
     }
   }
 };
