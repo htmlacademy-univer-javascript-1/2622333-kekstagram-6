@@ -1,5 +1,5 @@
 import { isEscapeKey } from './utils.js';
-import { resetFormValidation, initFormValidation } from './form-validation.js';
+import { resetFormValidation, initFormValidation, unblockSubmitButton } from './form-validation.js';
 import { initEffects, resetEffects } from './image-effects.js';
 import { initScale, resetScale, cleanupScale } from './image-scale.js';
 
@@ -45,11 +45,16 @@ const cleanupImageEditor = () => {
   resetEffects();
   cleanupScale();
   resetScale();
+
+  const submitButton = form.querySelector('.img-upload__submit');
+  if (submitButton) {
+    submitButton.disabled = false;
+  }
 };
 
 const closeImageEditor = () => {
   cleanupImageEditor();
-
+  unblockSubmitButton();
   mainWindow.classList.remove('modal-open');
   imageEditor.classList.add('hidden');
   document.removeEventListener('keydown', onDocumentKeydown);
@@ -129,6 +134,11 @@ const openImageEditor = () => {
 function onDocumentKeydown (evt) {
   if (isEscapeKey(evt) && !isTextFieldFocused()) {
     evt.preventDefault();
+    const submitButton = form.querySelector('.img-upload__submit');
+    if (submitButton.disabled) {
+      unblockSubmitButton();
+    }
+
     closeImageEditor();
   }
 }

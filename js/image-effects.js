@@ -22,11 +22,7 @@ const setEffectValue = (value, step) => {
     return Math.round(num).toString();
   }
 
-  if (num % 1 === 0) {
-    return num.toString();
-  }
-
-  return num.toFixed(1);
+  return num % 1 === 0 ? num.toString() : num.toFixed(1);
 };
 
 noUiSlider.create(effectLevelSlider, {

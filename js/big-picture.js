@@ -20,11 +20,12 @@ const onCloseBigPic = () => {
   mainWindow.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
 
-  resetComments();
-  resetLikes();
   if (bigPicCommentInput) {
     bigPicCommentInput.value = '';
   }
+
+  resetComments();
+  resetLikes();
 };
 
 const onOpenBigPic = () => {

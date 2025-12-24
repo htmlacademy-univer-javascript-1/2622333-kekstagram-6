@@ -9,8 +9,7 @@ const getRandomArrayElement = (array) =>
   array[getRandomInteger(0, array.length - 1)];
 
 const getRandomNoRepeatInt = (min, max, usedArray) => {
-  let currentValue;
-  currentValue = getRandomInteger(min, max);
+  let currentValue = getRandomInteger(min, max);
   while (usedArray.includes(currentValue))
   {
     currentValue = getRandomInteger(min, max);

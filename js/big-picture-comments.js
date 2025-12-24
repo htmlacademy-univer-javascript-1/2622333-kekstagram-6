@@ -6,7 +6,6 @@ const bigPicCommentList = document.querySelector('.social__comments');
 const bigPicCommentCount = document.querySelector('.social__comment-count');
 const bigPicCommentLoader = document.querySelector('.comments-loader');
 
-
 const createCommentElement = (comment) => {
   const commentElement = document.createElement('li');
   commentElement.classList.add('social__comment');
@@ -54,6 +53,12 @@ const initComments = (comments) => {
   pictureCommentsList = comments;
   isCommentsShown = 0;
   bigPicCommentList.innerHTML = '';
+  if (comments.length > COMMENTS_LOADING_SIZE) {
+    bigPicCommentLoader.classList.remove('hidden');
+  } else {
+    bigPicCommentLoader.classList.add('hidden');
+  }
+
   renderCommentsPortion();
 };
 
