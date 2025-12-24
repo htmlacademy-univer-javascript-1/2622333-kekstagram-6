@@ -13,6 +13,7 @@ const bigPicDescription = bigPicture.querySelector('.social__caption');
 const bigPicComments = bigPicture.querySelector('.comments-count');
 const bigPicCommentLoader = document.querySelector('.comments-loader');
 const bigPicLikes = document.querySelector('.likes-count');
+const bigPicCommentInput = document.querySelector('.social__footer-text');
 
 const onCloseBigPic = () => {
   bigPicture.classList.add('hidden');
@@ -21,6 +22,9 @@ const onCloseBigPic = () => {
 
   resetComments();
   resetLikes();
+  if (bigPicCommentInput) {
+    bigPicCommentInput.value = '';
+  }
 };
 
 const onOpenBigPic = () => {
