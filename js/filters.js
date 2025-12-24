@@ -21,15 +21,14 @@ const sortByComments = (pictureA, pictureB) => pictureB.comments.length - pictur
 
 const getRandomPictures = () => {
   const copy = [...pictures];
-  const result = [];
-
   const count = Math.min(RANDOM_PICTURES_COUNT, copy.length);
 
-  for (let i = 0; i < count; i++) {
+  const result = Array.from({ length: count }, () => {
     const randomIndex = getRandomInteger(0, copy.length - 1);
-    result.push(copy[randomIndex]);
+    const randomItem = copy[randomIndex];
     copy.splice(randomIndex, 1);
-  }
+    return randomItem;
+  });
 
   return result;
 };
