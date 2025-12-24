@@ -1,7 +1,9 @@
 import { isEscapeKey } from './utils.js';
-import { resetFormValidation, initFormValidation } from './form-validation.js';
-import { initEffects, resetEffects, cleanupEffect } from './image-effects.js';
+import { resetFormValidation, initFormValidation, unblockSubmitButton } from './form-validation.js';
+import { initEffects, resetEffects } from './image-effects.js';
 import { initScale, resetScale, cleanupScale } from './image-scale.js';
+
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
 const imageUploading = document.querySelector('.img-upload__input');
 const imageEditor = document.querySelector('.img-upload__overlay');
@@ -11,26 +13,51 @@ const form = document.querySelector('.img-upload__form');
 const hashtagField = form.querySelector('.text__hashtags');
 const commentField = form.querySelector('.text__description');
 const previewImage = document.querySelector('.img-upload__preview img');
+const effectsPreviews = document.querySelectorAll('.effects__preview');
 const defaultImageSrc = 'img/upload-default-image.jpg';
+
+let currentImageUrl = null;
 
 const isTextFieldFocused = () =>
   document.activeElement === hashtagField ||
   document.activeElement === commentField;
 
-const closeImageEditor = () => {
+const updateAllPreviews = (imageUrl) => {
+  previewImage.src = imageUrl;
+
+  effectsPreviews.forEach((preview) => {
+    preview.style.backgroundImage = `url("${imageUrl}")`;
+  });
+};
+
+const cleanupImageEditor = () => {
   form.reset();
   imageUploading.value = '';
 
-  previewImage.src = defaultImageSrc;
+  if (currentImageUrl) {
+    URL.revokeObjectURL(currentImageUrl);
+    currentImageUrl = null;
+  }
 
-  mainWindow.classList.remove('modal-open');
-  imageEditor.classList.add('hidden');
-  document.removeEventListener('keydown', onDocumentKeydown);
+  updateAllPreviews(defaultImageSrc);
+
   resetFormValidation();
-  cleanupEffect();
   resetEffects();
   cleanupScale();
   resetScale();
+
+  const submitButton = form.querySelector('.img-upload__submit');
+  if (submitButton) {
+    submitButton.disabled = false;
+  }
+};
+
+const closeImageEditor = () => {
+  cleanupImageEditor();
+  unblockSubmitButton();
+  mainWindow.classList.remove('modal-open');
+  imageEditor.classList.add('hidden');
+  document.removeEventListener('keydown', onDocumentKeydown);
 };
 
 const showFileTypeError = () => {
@@ -79,20 +106,21 @@ const openImageEditor = () => {
     return;
   }
 
-  const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
   const fileName = file.name.toLowerCase();
-  const matches = FILE_TYPES.some((type) => fileName.endsWith(type));
+  const isImageFile = FILE_TYPES.some((type) => fileName.endsWith(type));
+  const isImageType = file.type.startsWith('image/');
 
-  if (matches) {
-    previewImage.src = URL.createObjectURL(file);
-  }
-
-  const isImage = file.type.startsWith('image/');
-
-  if (!isImage) {
+  if (!isImageFile || !isImageType) {
     showFileTypeError();
     return;
   }
+
+  if (currentImageUrl) {
+    URL.revokeObjectURL(currentImageUrl);
+  }
+
+  currentImageUrl = URL.createObjectURL(file);
+  updateAllPreviews(currentImageUrl);
 
   imageEditor.classList.remove('hidden');
   mainWindow.classList.add('modal-open');
@@ -106,6 +134,11 @@ const openImageEditor = () => {
 function onDocumentKeydown (evt) {
   if (isEscapeKey(evt) && !isTextFieldFocused()) {
     evt.preventDefault();
+    const submitButton = form.querySelector('.img-upload__submit');
+    if (submitButton.disabled) {
+      unblockSubmitButton();
+    }
+
     closeImageEditor();
   }
 }

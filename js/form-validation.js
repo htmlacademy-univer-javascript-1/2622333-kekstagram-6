@@ -122,14 +122,6 @@ const showMessage = (template, closeButtonSelector, innerSelector, message = nul
   body.appendChild(element);
 };
 
-const showSuccessMessage = () => {
-  showMessage(successTemplate, '.success__button', '.success__inner');
-};
-
-const showErrorMessage = (message) => {
-  showMessage(errorTemplate, '.error__button', '.error__inner', message);
-};
-
 const blockSubmitButton = () => {
   submitButton.disabled = true;
   submitButton.textContent = 'Публикую...';
@@ -138,6 +130,16 @@ const blockSubmitButton = () => {
 const unblockSubmitButton = () => {
   submitButton.disabled = false;
   submitButton.textContent = 'Опубликовать';
+};
+
+const showSuccessMessage = () => {
+  unblockSubmitButton();
+  closeImageEditor();
+  showMessage(successTemplate, '.success__button', '.success__inner');
+};
+
+const showErrorMessage = (message) => {
+  showMessage(errorTemplate, '.error__button', '.error__inner', message);
 };
 
 const onFormSubmit = (evt) => {
@@ -182,4 +184,4 @@ const resetFormValidation = () => {
   commentInput.value = '';
 };
 
-export { initFormValidation, resetFormValidation, showErrorMessage };
+export { initFormValidation, resetFormValidation, showErrorMessage, blockSubmitButton, unblockSubmitButton };
