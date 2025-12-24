@@ -13,9 +13,21 @@ const effectLevelValue = document.querySelector('.effect-level__value');
 const effectLevelSlider = document.querySelector('.effect-level__slider');
 const effectLevel = document.querySelector('.effect-level');
 
-effectLevelValue.value = 100;
 let currentEffect = 'none';
-effectLevel.classList.add('hidden');
+
+const setEffectValue = (value, step) => {
+  const num = parseFloat(value);
+
+  if (step === 1) {
+    return Math.round(num).toString();
+  }
+
+  if (num % 1 === 0) {
+    return num.toString();
+  }
+
+  return num.toFixed(1);
+};
 
 noUiSlider.create(effectLevelSlider, {
   range: {
@@ -35,17 +47,29 @@ noUiSlider.create(effectLevelSlider, {
   }
 });
 
+effectLevel.classList.add('hidden');
+effectLevelValue.value = '';
 
 const updateSliderOptions = (effect) => {
   const effectData = EFFECTS[effect];
+
   effectLevelSlider.noUiSlider.updateOptions({
     range: {
       min: effectData.min,
       max: effectData.max,
     },
     start: effectData.max,
-    step: effectData.step
+    step: effectData.step,
+    format: {
+      to: function (value) {
+        return setEffectValue(value, effectData.step);
+      },
+      from: function (value) {
+        return parseFloat(value);
+      }
+    }
   });
+  effectLevelValue.value = setEffectValue(effectData.max, effectData.step);
 };
 
 const applyEffect = (effect, value) => {
@@ -53,16 +77,11 @@ const applyEffect = (effect, value) => {
   editingImage.style.filter = `${effectData.filter}(${value}${effectData.unit})`;
 };
 
-const cleanupEffect = () => {
-  editingImage.style.filter = 'none';
-  effectLevelValue.value = '';
-  effectLevel.classList.add('hidden');
-  currentEffect = 'none';
-};
-
 const onSliderUpdate = () => {
   const sliderValue = effectLevelSlider.noUiSlider.get();
-  effectLevelValue.value = sliderValue;
+  const effectData = EFFECTS[currentEffect];
+
+  effectLevelValue.value = setEffectValue(sliderValue, effectData.step);
 
   if (currentEffect !== 'none') {
     applyEffect(currentEffect, sliderValue);
@@ -70,17 +89,25 @@ const onSliderUpdate = () => {
 };
 
 const onEffectChangeHandler = (evt) => {
-  currentEffect = evt.target.value;
+  const newEffect = evt.target.value;
+  if (newEffect === currentEffect) {
+    return;
+  }
+
+  currentEffect = newEffect;
 
   if (currentEffect === 'none') {
     effectLevel.classList.add('hidden');
-    cleanupEffect();
-  }
+    editingImage.style.filter = 'none';
+    effectLevelValue.value = '';
+  } else {
+    effectLevel.classList.remove('hidden');
+    const effectData = EFFECTS[currentEffect];
+    effectLevelValue.value = setEffectValue(effectData.max, effectData.step);
 
-  effectLevel.classList.remove('hidden');
-  const effectData = EFFECTS[currentEffect];
-  applyEffect(currentEffect, effectData.max);
-  updateSliderOptions(currentEffect);
+    applyEffect(currentEffect, effectData.max);
+    updateSliderOptions(currentEffect);
+  }
 };
 
 const initEffects = () => {
@@ -94,7 +121,10 @@ const initEffects = () => {
 };
 
 const resetEffects = () => {
-  cleanupEffect();
+  currentEffect = 'none';
+  effectLevel.classList.add('hidden');
+  effectLevelValue.value = '';
+  editingImage.style.filter = 'none';
   effectLevelSlider.noUiSlider.off('update');
 
   if (effectsList.length > 0) {
@@ -102,6 +132,12 @@ const resetEffects = () => {
       effectElement.removeEventListener('change', onEffectChangeHandler);
     });
   }
+
+  effectLevelSlider.noUiSlider.updateOptions({
+    range: { min: 0, max: 100 },
+    start: 100,
+    step: 1
+  });
 };
 
-export { initEffects, cleanupEffect, resetEffects };
+export { initEffects, resetEffects };
