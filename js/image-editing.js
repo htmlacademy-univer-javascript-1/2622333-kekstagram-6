@@ -41,12 +41,8 @@ const showFileTypeError = () => {
 
   const titleElement = errorElement.querySelector('h2');
   if (titleElement) {
-    titleElement.textContent = 'Ошибка загрузки файла';
-  }
-
-  const textElement = errorElement.querySelector('p');
-  if (textElement) {
-    textElement.textContent = 'Пожалуйста, выберите файл с изображением. Поддерживаемые форматы: GIF, JPG, JPEG, PNG.';
+    titleElement.textContent = 'Неверный тип файла.\nВыберите изображение в формате GIF, JPEG или PNG';
+    titleElement.style.whiteSpace = 'pre-line';
   }
 
   const closeModal = () => {
